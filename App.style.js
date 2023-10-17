@@ -171,16 +171,17 @@ export const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#ffb800',
-    alignItems: 'center',
-    justifyContent: 'center',
+    // alignItems: 'center',
+    // justifyContent: 'center',
   },
   loginForm: {
     flex: 2,
-    width: '80%',
+    width: '100%',
     alignItems: 'center',
     justifyContent: 'center',
   },
   input2: {
+    flex: 0.25,
     width: '100%',
     padding: 15,
     marginBottom: 10,
