@@ -1,21 +1,14 @@
 import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
-  button: {
+  homeButton: {
     flex: 1,
     backgroundColor: "#1D91AD",
     alignItems: "center",
     justifyContent: "center",
     borderColor: "#ffb800",
-    borderWidth: 15,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 3,
-    },
-    shadowOpacity: 0.29,
-    shadowRadius: 4.65,
-    elevation: 7,
+    borderWidth: 8,
+    borderRadius: 15,
   },
   linksText: {
     textAlign: "center",
@@ -137,7 +130,8 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderColor: '#ffb800',
-    borderWidth: 15,
+    borderWidth: 9,
+    borderRadius: 15,
     elevation: 7,
   },
   calendarText: {
@@ -181,6 +175,7 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   loginForm: {
+    flex: 2,
     width: '80%',
     alignItems: 'center',
     justifyContent: 'center',
