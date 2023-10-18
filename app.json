@@ -9,7 +9,7 @@
     "splash": {
       "image": "./assets/sarmad.png",
       "resizeMode": "contain",
-      "backgroundColor": "#1D91AD"
+      "backgroundColor": "#8c2230"
     },
     "assetBundlePatterns": [
       "**/*"
