@@ -3,7 +3,7 @@ import {SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context';
 export function UpperPane() {
     return (
     <SafeAreaProvider>
-        <SafeAreaView style={{flex: 1.5, backgroundColor:'#ffb800', flexDirection:'row', justifyContent:'center', alignItems: 'flex-start'}}>   
+        <SafeAreaView style={{flex: 1.5, backgroundColor:'#DEB99D', flexDirection:'row', justifyContent:'center', alignItems: 'flex-start'}}>   
             <View style={styles.box1}>
             </View>
             <View style={styles.box2}>
@@ -23,7 +23,7 @@ export function UpperPane() {
 export function BottomPane() {
     return (
     <SafeAreaProvider>
-        <SafeAreaView style={{flex: 1.5, backgroundColor:'#ffb800', flexDirection:'row', justifyContent:'center', alignItems: 'flex-end'}}>   
+        <SafeAreaView style={{flex: 1.5, backgroundColor:'#DEB99D', flexDirection:'row', justifyContent:'center', alignItems: 'flex-end'}}>   
             <View style={styles.box5}>
             </View>
             <View style={styles.box4}>
@@ -42,35 +42,35 @@ export function BottomPane() {
 
 const styles = StyleSheet.create({
 box1: {
-    backgroundColor: '#B09834',
+    backgroundColor: '#DEB99D',
     height: '50%',
     width: '20%',
     flex: 1,
 
 },
 box2: {
-    backgroundColor: '#93974c',
+    backgroundColor: '#ca9382',
     height: '50%',
     width: '20%',
     flex: 1,
 
 },
 box3: {
-    backgroundColor: '#669470',
+    backgroundColor: '#b56e66',
     height: '50%',
     width: '20%',
     flex: 1,
 
 },
 box4: {
-    backgroundColor: '#42938f',
+    backgroundColor: '#a0484b',
     height: '50%',
     width: '20%',
     flex: 1,
 
 },
 box5: {
-    backgroundColor: '#1D91AD',
+    backgroundColor: '#8C2230',
     height: '50%',
     width: '20%',
     flex: 1,

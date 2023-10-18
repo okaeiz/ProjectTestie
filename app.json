@@ -7,9 +7,9 @@
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/sarmad.png",
+      "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#1D91AD"
+      "backgroundColor": "#8c2230"
     },
     "assetBundlePatterns": [
       "**/*"
