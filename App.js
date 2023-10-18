@@ -45,7 +45,7 @@ function HomeScreen({ navigation, route }) {
       <View style={styles.actionButtonsContainer}>
       <LinearGradient colors={['#9c2f40', '#8c2230']} style={styles.homeButton}>
         <TouchableOpacity onPress={() => navigation.navigate('Profile', { fullName: fullName })} style={{alignItems:'center'}}>
-          <FontAwesome name="address-card" size={24} color="#deb99d" />
+          <FontAwesome name="address-card" size={24} color="#deb99d" />    
           <Text style={styles.buttonText}>پروفایل من</Text>
         </TouchableOpacity>
       </LinearGradient>
