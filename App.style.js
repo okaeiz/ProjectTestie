@@ -130,7 +130,7 @@ export const styles = StyleSheet.create({
     padding: 10, // Add some padding to the inner content if needed
   },
   welcomeText: {
-    fontSize: 25,
+    fontSize: 30,
     fontFamily: 'Lalezar_400Regular',
     color: '#deb99d',
   },
@@ -254,5 +254,49 @@ export const styles = StyleSheet.create({
     fontFamily: 'Lalezar_400Regular',
     fontSize: 20,
   },
+  scrumDailyProjectsContainer: {
+    flex: 2,
+    backgroundColor: '#deb99d',
+    alignItems: 'center',
+    marginTop: 10,
+    color: '#deb99d',
+  },
+  scrumDailyProjects: {
+    flex: 1,
+    backgroundColor: '#8c2230',
+    justifyContent: 'center',
+    marginTop: 40,
+    padding: 10,
+    borderRadius: 15,
+    borderWidth: 8,
+    color: '#deb99d',
+    borderColor: "#8c2230",
+    elevation: 5, // for Android shadow
+    shadowColor: "#000", // for iOS shadow
+    shadowOffset: { width: 0, height: 2 }, // for iOS shadow
+    shadowOpacity: 0.25, // for iOS shadow
+    shadowRadius: 3.84, // for iOS shadow
+    width: '40%'
+  },
+  scrumDailyProjectsText: {
+    fontFamily: 'Lalezar_400Regular',
+    fontSize: 22,
+    color: '#deb99d',
+    textAlign: 'center',
+  },
+  circle: {
+    width: 30,
+    height: 30,
+    borderRadius: 15,
+    backgroundColor: '#deb99d',
+    position: 'absolute',
+  },
+  square: {
+    width: 30,
+    height: 30,
+    backgroundColor: '#deb99d',
+    position: 'absolute',
+  },
 
 });
+
