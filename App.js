@@ -1,10 +1,10 @@
-import React,  { useState, useEffect }  from 'react';
+import React,  { useState, useEffect, useRef }  from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { View, Text, TouchableOpacity, TouchableNativeFeedback, Linking, TextInput  } from 'react-native';
+import { View, Text, TouchableOpacity, Linking, TextInput, Animated } from 'react-native';
 import { UpperPane, BottomPane } from './components/pane/pane';
 import {styles} from './App.style';
-import { authenticateWithTaiga, fetchUserDetails, fetchFromExpress } from './services/taigaAPI';
+import { authenticateWithTaiga, fetchUserDetails, fetchFromExpress, fetchCurrentProject } from './services/taigaAPI';
 import { useFonts, Bangers_400Regular } from '@expo-google-fonts/bangers';
 import { Lalezar_400Regular } from '@expo-google-fonts/lalezar';
 import * as NavigationBar from 'expo-navigation-bar';
@@ -28,6 +28,53 @@ const openURL = (url) => {
 
 function HomeScreen({ navigation, route }) {
   const { fullName } = route.params;
+  const { username } = route.params;
+  const { id } = route.params;
+  const circlePosition = useRef(new Animated.ValueXY()).current;
+  const squarePosition = useRef(new Animated.ValueXY()).current;
+  const opacity = useRef(new Animated.Value(1)).current;
+
+  useEffect(() => {
+    const blinkingAnimation = Animated.loop(
+      Animated.sequence([
+        Animated.timing(opacity, {
+          toValue: 0.7,
+          duration: 1000,
+          useNativeDriver: false,
+        }),
+        Animated.timing(opacity, {
+          toValue: 1,
+          duration: 1000,
+          useNativeDriver: false,
+        }),
+      ])
+    );
+
+    blinkingAnimation.start();
+  }, []);
+
+  const moveShapesRandomly = () => {
+    // Generate random positions for the circle and square
+    const randomCirclePosition = {
+      x: Math.random() * 100 - 50, // Random value between -50 and 50
+      y: Math.random() * 100 - 50,
+    };
+
+    const randomSquarePosition = {
+      x: Math.random() * 100 - 50,
+      y: Math.random() * 100 - 50,
+    };
+        // Animate the shapes to the new positions
+        Animated.spring(circlePosition, {
+          toValue: randomCirclePosition,
+          useNativeDriver: false,
+        }).start();
+    
+        Animated.spring(squarePosition, {
+          toValue: randomSquarePosition,
+          useNativeDriver: false,
+        }).start();
+      };
 
   return (
     <View style={{flex: 1}}>      
@@ -37,10 +84,19 @@ function HomeScreen({ navigation, route }) {
         <Text style={styles.welcomeText}>خوش اومدی، {fullName}!</Text>
       </View>
       </View>
+      {/* <View style={styles.calendarOuterContainer}>
+      <TouchableOpacity style={[styles.calendarContainer, { opacity: opacity }]} onPress={moveShapesRandomly}>
+      <Animated.View style={[styles.circle, { transform: circlePosition.getTranslateTransform() }]} />
+      <Animated.View style={[styles.square, { transform: squarePosition.getTranslateTransform() }]} />
+      </TouchableOpacity>
+      </View> */}
       <View style={styles.calendarOuterContainer}>
-      <View style={styles.calendarContainer}>
-        <Text style={styles.calendarText}>Testie</Text>
-      </View>
+        <TouchableOpacity onPress={moveShapesRandomly}>
+          <Animated.View style={[styles.calendarContainer, { opacity: opacity }]}>
+            <Animated.View style={[styles.circle, { transform: circlePosition.getTranslateTransform() }]} />
+            <Animated.View style={[styles.square, { transform: squarePosition.getTranslateTransform() }]} />
+          </Animated.View>
+        </TouchableOpacity>
       </View>
       <View style={styles.actionButtonsContainer}>
       <LinearGradient colors={['#9c2f40', '#8c2230']} style={styles.homeButton}>
@@ -65,7 +121,7 @@ function HomeScreen({ navigation, route }) {
       </View>
       <View style={styles.actionButtonsContainer}>
       <LinearGradient colors={['#9c2f40', '#8c2230']} style={styles.homeButton}>
-      <TouchableOpacity onPress={() => navigation.navigate('Daily scrum')} style={{alignItems:'center'}}>
+      <TouchableOpacity onPress={() => navigation.navigate('Daily scrum', { id:id })} style={{alignItems:'center'}}>
           <FontAwesome name="calendar" size={24} color="#deb99d" />
           <Text style={styles.buttonText}>دیلی اسکرام</Text>
         </TouchableOpacity>
@@ -98,7 +154,9 @@ function LoginScreen({ navigation }) {
       console.log(`User ${username} was authenticated! Token:`, token);
       const userDetails = await fetchUserDetails(token);
       const fullName = userDetails.full_name; // Assuming the API returns a 'full_name' field.
-      navigation.navigate('Home', { fullName: fullName });
+      const user_name = userDetails.username;
+      const user_id = userDetails.id;
+      navigation.navigate('Home', { fullName: fullName, username: user_name, id: user_id });
     } catch (error) {
       console.error('Authentication failed:', error.message);
       setError('نام کاربری یا رمز عبورت رو اشتباه وارد کردی!');
@@ -181,13 +239,43 @@ function ProfileScreen({ route }) {
   );
 }
 
-function DailyScrum() {
+function DailyScrum({ route }) {
+  const { id } = route.params;
+  const [userDetails, setUserDetails] = useState(null);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await fetchCurrentProject(id);
+        setUserDetails(data);
+      } catch (err) {
+        console.error("Error fetching user details:", err);
+        setError(err.message);
+      }
+    };
+
+    fetchData();
+  }, [id]); // The effect will re-run if 'id' changes
+
   return (
     <View style={{ flex: 1, backgroundColor: '#8c2230' }}>
       <UpperPane/>
       <View style={styles.welcomeContainer}>
-        <Text style={styles.welcomeText}>Welcome to Daily scrum! You can confirm the session here.</Text>
+        {error && <Text>Error: {error}</Text>}
+        {userDetails && <Text style={styles.welcomeText}>پروژه‌ت رو انتخاب کن!</Text>}
       </View>
+      <View style={styles.scrumDailyProjectsContainer}>
+              {/* Render a TouchableOpacity for each project */}
+              {userDetails && userDetails.map((project, index) => (
+        <LinearGradient colors={['#a0484b', '#8c2230']} style={styles.scrumDailyProjects}>
+          <TouchableOpacity 
+            key={index}>
+            <Text style={styles.scrumDailyProjectsText}>{project.name}</Text>
+          </TouchableOpacity>
+          </LinearGradient>
+        ))}
+        </View>
       <BottomPane/>
     </View>
   );

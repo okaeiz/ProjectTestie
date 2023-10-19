@@ -1,5 +1,5 @@
 const TAIGA_BASE_URL = 'https://taiga.sarmadinst.ir/api/v1';
-const EXPRESS_BASE_URL = 'http://192.168.175.63:5000'; // My local IP address
+const EXPRESS_BASE_URL = 'http://192.168.0.115:5000'; // My local IP address
 
 
 export const authenticateWithTaiga = async (username, password) => {
@@ -78,7 +78,7 @@ export const fetchUserDetails = async (authToken) => {
 };
 
 export const fetchFromExpress = async () => {
-  const endpoint = `${EXPRESS_BASE_URL}/some-endpoint`;
+  const endpoint = `${EXPRESS_BASE_URL}/current-milestone`;
 
   try {
     const response = await fetch(endpoint);
@@ -94,4 +94,24 @@ export const fetchFromExpress = async () => {
     throw error;
   }
 };
+
+export const fetchCurrentProject = async (userId) => {
+  const endpoint = `${EXPRESS_BASE_URL}/projects?userId=${userId}`;
+
+  try {
+    const response = await fetch(endpoint);
+    const data = await response.json();
+
+    if (response.ok) {
+      return data;
+    } else {
+      throw new Error('Failed to fetch from Express');
+    }
+  } catch (error) {
+    console.error('Error fetching from Express:', error);
+    throw error;
+  }
+};
+
+
 
