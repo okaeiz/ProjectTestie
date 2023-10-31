@@ -3,8 +3,8 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { View, Text, TouchableOpacity, Linking, TextInput, Animated } from 'react-native';
 import { UpperPane, BottomPane } from './components/pane/pane';
-import {styles} from './App.style';
-import { authenticateWithTaiga, fetchUserDetails, fetchFromExpress, fetchCurrentProject } from './services/taigaAPI';
+import {styles, login_styles, daily_scrum_styles, meetings_styles} from './App.style';
+import { authenticateWithTaiga, fetchUserDetails, fetchCurrentMilestone, fetchCurrentProject } from './services/taigaAPI';
 import { useFonts, Bangers_400Regular } from '@expo-google-fonts/bangers';
 import { Lalezar_400Regular } from '@expo-google-fonts/lalezar';
 import * as NavigationBar from 'expo-navigation-bar';
@@ -100,7 +100,7 @@ function HomeScreen({ navigation, route }) {
       </View>
       <View style={styles.actionButtonsContainer}>
       <LinearGradient colors={['#9c2f40', '#8c2230']} style={styles.homeButton}>
-        <TouchableOpacity onPress={() => navigation.navigate('Profile', { fullName: fullName })} style={{alignItems:'center'}}>
+        <TouchableOpacity onPress={() => navigation.navigate('Profile', { fullName: fullName, username: username })} style={{alignItems:'center'}}>
           <FontAwesome name="address-card" size={24} color="#deb99d" />    
           <Text style={styles.buttonText}>پروفایل من</Text>
         </TouchableOpacity>
@@ -108,7 +108,7 @@ function HomeScreen({ navigation, route }) {
       <LinearGradient colors={['#9c2f40', '#8c2230']} style={styles.homeButton}>
         <TouchableOpacity style={{alignItems:'center'}} onPress={async () => {
         try {
-            const results = await fetchFromExpress();
+            const results = await fetchCurrentMilestone(5);
             console.log(results);
         } catch (error) {
             console.error("Error fetching from Express:", error);
@@ -121,9 +121,9 @@ function HomeScreen({ navigation, route }) {
       </View>
       <View style={styles.actionButtonsContainer}>
       <LinearGradient colors={['#9c2f40', '#8c2230']} style={styles.homeButton}>
-      <TouchableOpacity onPress={() => navigation.navigate('Daily scrum', { id:id })} style={{alignItems:'center'}}>
-          <FontAwesome name="calendar" size={24} color="#deb99d" />
-          <Text style={styles.buttonText}>دیلی اسکرام</Text>
+        <TouchableOpacity onPress={() => navigation.navigate('Meetings')} style={{alignItems:'center'}}>
+          <FontAwesome name="group" size={24} color="#deb99d" />
+          <Text style={styles.buttonText}>جلسات</Text>
         </TouchableOpacity>
         </LinearGradient>
         <LinearGradient colors={['#9c2f40', '#8c2230']} style={styles.homeButton}>
@@ -133,6 +133,16 @@ function HomeScreen({ navigation, route }) {
         </TouchableOpacity>
         </LinearGradient>
       </View>
+      <View style={styles.actionButtonsContainer}>
+      <LinearGradient colors={['#9c2f40', '#8c2230']} style={styles.homeButton}>
+      <TouchableOpacity onPress={() => navigation.navigate('Daily scrum', { id:id })} style={{alignItems:'center'}}>
+          <FontAwesome name="calendar" size={24} color="#deb99d" />
+          <Text style={styles.buttonText}>پروژه‌های من</Text>
+        </TouchableOpacity>
+        </LinearGradient>
+
+      </View>
+
       <View style={styles.poweredByContainer}>
         <Text style={styles.poweredByText}>Powered by okaeiz!</Text>
       </View>
@@ -164,33 +174,33 @@ function LoginScreen({ navigation }) {
     }
   };
 
-  return (
-    <View style={styles.container}>
-    <UpperPane/>
-    <View style={styles.loginForm}>
-      <TextInput 
-        style={styles.input2} 
-        placeholder="نام کاربری"
-        placeholderTextColor="#c18477"
-        onChangeText={setUsername} 
-        value={username} 
-      />
-      <TextInput 
-        style={styles.input2} 
-        placeholder="رمز عبور" 
-        placeholderTextColor="#c18477"
-        onChangeText={setPassword} 
-        value={password} 
-        secureTextEntry 
-      />
-      {error && <Text style={styles.errorText}>نام کاربری یا رمز عبورت رو اشتباه وارد کردی!</Text>}
-      <TouchableOpacity style={styles.loginButton2} onPress={handleLogin}>
-        <Text style={styles.loginButtonText2}>بزن بریم!</Text>
-      </TouchableOpacity>
-    </View>
 
-    <BottomPane/>
-  </View>
+  return (
+    <View style={login_styles.loginContainer}>
+      <UpperPane />
+      <View style={login_styles.loginForm}>
+        <TextInput 
+          style={login_styles.loginInput} 
+          placeholder="نام کاربری"
+          placeholderTextColor="#c18477"
+          onChangeText={setUsername} 
+          value={username} 
+        />
+        <TextInput 
+          style={login_styles.loginInput} 
+          placeholder="رمز عبور" 
+          placeholderTextColor="#c18477"
+          onChangeText={setPassword} 
+          value={password} 
+          secureTextEntry 
+        />
+        {error && <Text style={login_styles.loginErrorText}>نام کاربری یا رمز عبورت رو اشتباه وارد کردی!</Text>}
+        <TouchableOpacity style={login_styles.loginButton2} onPress={handleLogin}>
+          <Text style={login_styles.loginButtonText2}>بزن بریم!</Text>
+        </TouchableOpacity>
+      </View>
+      <BottomPane />
+    </View>
   );
 }
 
@@ -228,11 +238,15 @@ function LinksScreen() {
 
 function ProfileScreen({ route }) {
   const { fullName } = route.params;
+  const { username } = route.params;
+
   return (
     <View style={{ flex: 1, backgroundColor: '#8c2230' }}>
       <UpperPane/>
       <View style={styles.welcomeContainer}>
-        <Text style={styles.welcomeText}>Your username is: {fullName}!</Text>
+        <Text style={styles.welcomeText}>نام: {fullName}</Text>
+        <Text style={styles.welcomeText}>نام کاربری: {username}</Text>
+
       </View>
       <BottomPane/>
     </View>
@@ -261,22 +275,58 @@ function DailyScrum({ route }) {
   return (
     <View style={{ flex: 1, backgroundColor: '#8c2230' }}>
       <UpperPane/>
-      <View style={styles.welcomeContainer}>
+      <View style={daily_scrum_styles.welcomeContainer}>
         {error && <Text>Error: {error}</Text>}
-        {userDetails && <Text style={styles.welcomeText}>پروژه‌ت رو انتخاب کن!</Text>}
+        {userDetails && <Text style={daily_scrum_styles.welcomeText}>پروژه‌ت رو انتخاب کن!</Text>}
       </View>
-      <View style={styles.scrumDailyProjectsContainer}>
+      <View style={daily_scrum_styles.scrumDailyProjectsContainer}>
               {/* Render a TouchableOpacity for each project */}
               {userDetails && userDetails.map((project, index) => (
-        <LinearGradient colors={['#a0484b', '#8c2230']} style={styles.scrumDailyProjects}>
+        <LinearGradient colors={['#a0484b', '#8c2230']} style={daily_scrum_styles.scrumDailyProjects}>
           <TouchableOpacity 
             key={index}>
-            <Text style={styles.scrumDailyProjectsText}>{project.name}</Text>
+            <Text style={daily_scrum_styles.scrumDailyProjectsText}>{project.name}</Text>
           </TouchableOpacity>
           </LinearGradient>
         ))}
         </View>
       <BottomPane/>
+    </View>
+  );
+}
+
+function MeetingDaysSelection() {
+  const [selectedDays, setSelectedDays] = useState([]);
+
+  const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']; // Sample days
+
+  const toggleDaySelection = (day) => {
+    if (selectedDays.includes(day)) {
+      setSelectedDays(selectedDays.filter(d => d !== day));
+    } else {
+      setSelectedDays([...selectedDays, day]);
+    }
+  };
+
+  return (
+    <View style={meetings_styles.dailyScrumContainer}>
+      <View style={meetings_styles.dailyScrumDaysContainer}>
+        {days.map((day, index) => (
+          <TouchableOpacity
+            key={index}
+            style={[
+              meetings_styles.dailyScrumDayButton,
+              selectedDays.includes(day) && meetings_styles.dailyScrumSelectedDayButton
+            ]}
+            onPress={() => toggleDaySelection(day)}
+          >
+            <Text style={meetings_styles.dailyScrumDayText}>{day}</Text>
+          </TouchableOpacity>
+        ))}
+      </View>
+      <TouchableOpacity style={meetings_styles.dailyScrumConfirmButton}>
+        <Text style={meetings_styles.dailyScrumConfirmButtonText}>Confirm</Text>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -303,6 +353,7 @@ export default function App() {
         <Stack.Screen name="Login" component={LoginScreen} />
         <Stack.Screen name="Profile" component={ProfileScreen} />
         <Stack.Screen name="Daily scrum" component={DailyScrum} />
+        <Stack.Screen name="Meetings" component={MeetingDaysSelection} />
       </Stack.Navigator>
     </NavigationContainer>
   );

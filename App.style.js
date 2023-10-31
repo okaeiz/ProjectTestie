@@ -185,43 +185,6 @@ export const styles = StyleSheet.create({
     fontFamily: 'Bangers_400Regular',
     color: '#8c2230',
   },
-  //
-  container: {
-    flex: 1,
-    backgroundColor: '#deb99d',
-    // alignItems: 'center',
-    // justifyContent: 'center',
-  },
-  loginForm: {
-    flex: 2,
-    width: '100%',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  input2: {
-    flex: 0.25,
-    width: '100%',
-    padding: 15,
-    marginBottom: 10,
-    backgroundColor: '#fff',
-    borderColor: '#ddd',
-    borderWidth: 1,
-    borderRadius: 5,
-    fontFamily: 'Lalezar_400Regular',
-  },
-  loginButton2: {
-    backgroundColor: '#8c2230',
-    paddingVertical: 10,
-    paddingHorizontal: 15,
-    borderRadius: 5,
-    width: '100%',
-    alignItems: 'center',
-  },
-  loginButtonText2: {
-    color: '#deb99d',
-    fontFamily: 'Lalezar_400Regular',
-    fontSize: 25,
-  },
   errorText: {
     color: 'red',
     marginBottom: 10,
@@ -254,36 +217,6 @@ export const styles = StyleSheet.create({
     fontFamily: 'Lalezar_400Regular',
     fontSize: 20,
   },
-  scrumDailyProjectsContainer: {
-    flex: 2,
-    backgroundColor: '#deb99d',
-    alignItems: 'center',
-    marginTop: 10,
-    color: '#deb99d',
-  },
-  scrumDailyProjects: {
-    flex: 1,
-    backgroundColor: '#8c2230',
-    justifyContent: 'center',
-    marginTop: 40,
-    padding: 10,
-    borderRadius: 15,
-    borderWidth: 8,
-    color: '#deb99d',
-    borderColor: "#8c2230",
-    elevation: 5, // for Android shadow
-    shadowColor: "#000", // for iOS shadow
-    shadowOffset: { width: 0, height: 2 }, // for iOS shadow
-    shadowOpacity: 0.25, // for iOS shadow
-    shadowRadius: 3.84, // for iOS shadow
-    width: '40%'
-  },
-  scrumDailyProjectsText: {
-    fontFamily: 'Lalezar_400Regular',
-    fontSize: 22,
-    color: '#deb99d',
-    textAlign: 'center',
-  },
   circle: {
     width: 30,
     height: 30,
@@ -300,3 +233,138 @@ export const styles = StyleSheet.create({
 
 });
 
+export const login_styles = StyleSheet.create({
+  loginContainer: {
+    flex: 1,
+    backgroundColor: '#deb99d',
+    padding: 20,  // Added padding to give some space around the edges
+  },
+  loginForm: {
+    flex: 2,
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  loginInput: {
+    flex: 0.25,
+    width: '90%',  // Reduced width to give some breathing room
+    padding: 15,
+    marginBottom: 15,  // Increased margin-bottom for more spacing
+    backgroundColor: '#fff',
+    borderColor: '#ddd',
+    borderWidth: 1,
+    borderRadius: 10,  // Increased border radius for softer corners
+    fontFamily: 'Lalezar_400Regular',
+    elevation: 3,  // Added shadow for Android
+    shadowColor: '#000',  // Shadow for iOS
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+  },
+  loginButton2: {
+    backgroundColor: '#8c2230',
+    paddingVertical: 12,  // Increased vertical padding for bigger touch target
+    paddingHorizontal: 15,
+    borderRadius: 10,  // Increased border radius for softer corners
+    width: '90%',  // Reduced width to match input fields
+    alignItems: 'center',
+    elevation: 5,  // Added shadow for Android
+    shadowColor: '#000',  // Shadow for iOS
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+  },
+  loginButtonText2: {
+    color: '#deb99d',
+    fontFamily: 'Lalezar_400Regular',
+    fontSize: 25,
+  },
+  loginErrorText: {
+    color: 'red',
+    marginBottom: 15,  // Increased margin-bottom for more spacing
+    fontFamily: 'Lalezar_400Regular',
+    textAlign: 'center',
+  },
+});
+
+export const daily_scrum_styles = StyleSheet.create({
+  welcomeContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#8c2230',
+    padding: 20,
+  },
+  welcomeText: {
+    fontSize: 28,
+    fontFamily: 'Lalezar_400Regular',
+    color: '#deb99d',
+    marginBottom: 10,  // Added some bottom margin for spacing
+  },
+  scrumDailyProjectsContainer: {
+    flex: 2,
+    backgroundColor: '#deb99d',
+    alignItems: 'center',
+    paddingTop: 20,  // Added top padding for spacing
+  },
+  scrumDailyProjects: {
+    flex: 1,
+    justifyContent: 'center',
+    marginTop: 25,  // Reduced the top margin for a more compact look
+    marginBottom: 10,  // Added bottom margin for spacing between items
+    padding: 15,  // Increased padding for a more touch-friendly area
+    borderRadius: 20,  // Increased border radius for a modern look
+    borderColor: "#8c2230",
+    borderWidth: 5,  // Reduced border width
+    elevation: 5,  // Shadow for Android
+    shadowColor: "#000",  // Shadow for iOS
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    width: '85%',  // Increased width for a more prominent appearance
+  },
+  scrumDailyProjectsText: {
+    fontFamily: 'Lalezar_400Regular',
+    fontSize: 22,
+    color: '#deb99d',
+    textAlign: 'center',
+  },
+});
+
+export const meetings_styles = StyleSheet.create({
+  dailyScrumContainer: {
+    flex: 1,
+    backgroundColor: '#deb99d',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  dailyScrumDaysContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    marginBottom: 20,
+  },
+  dailyScrumDayButton: {
+    backgroundColor: '#8c2230',
+    padding: 10,
+    margin: 5,
+    borderRadius: 5,
+  },
+  dailyScrumSelectedDayButton: {
+    backgroundColor: '#a0484b',
+  },
+  dailyScrumDayText: {
+    color: '#deb99d',
+    fontFamily: 'Lalezar_400Regular',
+    fontSize: 18,
+  },
+  dailyScrumConfirmButton: {
+    backgroundColor: '#8c2230',
+    padding: 15,
+    borderRadius: 5,
+  },
+  dailyScrumConfirmButtonText: {
+    color: '#deb99d',
+    fontFamily: 'Lalezar_400Regular',
+    fontSize: 20,
+  },
+});
