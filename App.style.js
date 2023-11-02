@@ -332,39 +332,69 @@ export const daily_scrum_styles = StyleSheet.create({
 });
 
 export const meetings_styles = StyleSheet.create({
-  dailyScrumContainer: {
+  sprintPlanningContainer: {
     flex: 1,
     backgroundColor: '#deb99d',
     alignItems: 'center',
     justifyContent: 'center',
   },
-  dailyScrumDaysContainer: {
+  sprintPlanningDaysContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     marginBottom: 20,
   },
-  dailyScrumDayButton: {
+  sprintPlanningDayButton: {
     backgroundColor: '#8c2230',
     padding: 10,
     margin: 5,
     borderRadius: 5,
   },
-  dailyScrumSelectedDayButton: {
+  sprintPlanningSelectedDayButton: {
     backgroundColor: '#a0484b',
   },
-  dailyScrumDayText: {
+  sprintPlanningDayText: {
     color: '#deb99d',
     fontFamily: 'Lalezar_400Regular',
     fontSize: 18,
   },
-  dailyScrumConfirmButton: {
+  sprintPlanningConfirmButton: {
     backgroundColor: '#8c2230',
     padding: 15,
     borderRadius: 5,
   },
-  dailyScrumConfirmButtonText: {
+  sprintPlanningConfirmButtonText: {
     color: '#deb99d',
     fontFamily: 'Lalezar_400Regular',
     fontSize: 20,
   },
+});
+
+export const sprint_planning_styles = StyleSheet.create({
+  welcomeContainer: {
+    // styles for the container
+  },
+  welcomeText: {
+    // styles for the welcome text
+  },
+  confirmationText: {
+    // styles for the confirmation message
+    color: 'white',
+    fontSize: 18,
+    marginVertical: 20, // example spacing
+    textAlign: 'center',
+  },
+  confirmButton: {
+    // styles for the confirmation button
+    backgroundColor: 'green',
+    padding: 10,
+    borderRadius: 5,
+    marginVertical: 10,
+  },
+  confirmButtonText: {
+    // styles for the text inside the button
+    color: 'white',
+    fontSize: 16,
+    textAlign: 'center',
+  },
+  // ... any other styles you may need
 });

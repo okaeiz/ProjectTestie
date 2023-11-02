@@ -3,8 +3,8 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { View, Text, TouchableOpacity, Linking, TextInput, Animated } from 'react-native';
 import { UpperPane, BottomPane } from './components/pane/pane';
-import {styles, login_styles, daily_scrum_styles, meetings_styles} from './App.style';
-import { authenticateWithTaiga, fetchUserDetails, fetchCurrentMilestone, fetchCurrentProject } from './services/taigaAPI';
+import {styles, login_styles, daily_scrum_styles, sprint_planning_styles} from './App.style';
+import { authenticateWithTaiga, fetchUserDetails, fetchCurrentMilestone, fetchCurrentProject, setSprintPlanning } from './services/taigaAPI';
 import { useFonts, Bangers_400Regular } from '@expo-google-fonts/bangers';
 import { Lalezar_400Regular } from '@expo-google-fonts/lalezar';
 import * as NavigationBar from 'expo-navigation-bar';
@@ -120,12 +120,12 @@ function HomeScreen({ navigation, route }) {
         </LinearGradient>
       </View>
       <View style={styles.actionButtonsContainer}>
-      <LinearGradient colors={['#9c2f40', '#8c2230']} style={styles.homeButton}>
+      {/* <LinearGradient colors={['#9c2f40', '#8c2230']} style={styles.homeButton}>
         <TouchableOpacity onPress={() => navigation.navigate('Meetings')} style={{alignItems:'center'}}>
           <FontAwesome name="group" size={24} color="#deb99d" />
           <Text style={styles.buttonText}>جلسات</Text>
         </TouchableOpacity>
-        </LinearGradient>
+        </LinearGradient> */}
         <LinearGradient colors={['#9c2f40', '#8c2230']} style={styles.homeButton}>
         <TouchableOpacity onPress={() => navigation.navigate('Links')} style={{alignItems:'center'}}>
           <FontAwesome name="link" size={24} color="#deb99d" />
@@ -135,7 +135,7 @@ function HomeScreen({ navigation, route }) {
       </View>
       <View style={styles.actionButtonsContainer}>
       <LinearGradient colors={['#9c2f40', '#8c2230']} style={styles.homeButton}>
-      <TouchableOpacity onPress={() => navigation.navigate('Daily scrum', { id:id })} style={{alignItems:'center'}}>
+      <TouchableOpacity onPress={() => navigation.navigate('Sprint Planning', { id:id })} style={{alignItems:'center'}}>
           <FontAwesome name="calendar" size={24} color="#deb99d" />
           <Text style={styles.buttonText}>پروژه‌های من</Text>
         </TouchableOpacity>
@@ -253,7 +253,7 @@ function ProfileScreen({ route }) {
   );
 }
 
-function DailyScrum({ route }) {
+function Planning({ route, navigation }) {
   const { id } = route.params;
   const [userDetails, setUserDetails] = useState(null);
   const [error, setError] = useState(null);
@@ -274,62 +274,72 @@ function DailyScrum({ route }) {
 
   return (
     <View style={{ flex: 1, backgroundColor: '#8c2230' }}>
-      <UpperPane/>
-      <View style={daily_scrum_styles.welcomeContainer}>
-        {error && <Text>Error: {error}</Text>}
-        {userDetails && <Text style={daily_scrum_styles.welcomeText}>پروژه‌ت رو انتخاب کن!</Text>}
-      </View>
+      {/* ... */}
       <View style={daily_scrum_styles.scrumDailyProjectsContainer}>
-              {/* Render a TouchableOpacity for each project */}
-              {userDetails && userDetails.map((project, index) => (
-        <LinearGradient colors={['#a0484b', '#8c2230']} style={daily_scrum_styles.scrumDailyProjects}>
-          <TouchableOpacity 
-            key={index}>
-            <Text style={daily_scrum_styles.scrumDailyProjectsText}>{project.name}</Text>
-          </TouchableOpacity>
+        {/* Render a TouchableOpacity for each project */}
+        {userDetails && userDetails.map((project, index) => (
+          <LinearGradient colors={['#a0484b', '#8c2230']} style={daily_scrum_styles.scrumDailyProjects} key={project.id}>
+            <TouchableOpacity onPress={() => navigation.navigate('Sprint Planning Confirmation', { projectId: project.id })}>
+  <Text style={daily_scrum_styles.scrumDailyProjectsText}>{project.name}</Text>
+</TouchableOpacity>
           </LinearGradient>
         ))}
-        </View>
-      <BottomPane/>
+      </View>
+      {/* ... */}
     </View>
   );
 }
 
-function MeetingDaysSelection() {
-  const [selectedDays, setSelectedDays] = useState([]);
-
-  const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']; // Sample days
-
-  const toggleDaySelection = (day) => {
-    if (selectedDays.includes(day)) {
-      setSelectedDays(selectedDays.filter(d => d !== day));
-    } else {
-      setSelectedDays([...selectedDays, day]);
+function SprintPlanningConfirmation({ route, navigation }) {
+  const { projectId } = route.params;
+  const handleSetSprintPlanning = async () => {
+    try {
+      // Assuming projId is available in the scope. If not, you'll need to get it from the appropriate state or props.
+      const projId = projectId; // Replace with actual project ID retrieval logic
+      
+      // Fetch the current milestone ID using the fetchCurrentMilestone function
+      const milestone = await fetchCurrentMilestone(projId);
+      
+      if (milestone && milestone.id) {
+        console.log("Milestone ID:", milestone.id); // Log the milestone ID
+        console.log("Project ID:", projId); // Log the project ID
+  
+        // Call the setSprintPlanning API with projId and the fetched milestone ID
+        const planningResponse = await setSprintPlanning(projId, milestone.id);
+        // Handle the response from the setSprintPlanning call
+        // ...
+      } else {
+        console.error("Failed to retrieve milestone ID.");
+        // Handle the error appropriately
+      }
+    } catch (error) {
+      console.error("Error in handleSetSprintPlanning:", error);
+      // Handle the error appropriately
     }
   };
+  
+  
+  
 
   return (
-    <View style={meetings_styles.dailyScrumContainer}>
-      <View style={meetings_styles.dailyScrumDaysContainer}>
-        {days.map((day, index) => (
-          <TouchableOpacity
-            key={index}
-            style={[
-              meetings_styles.dailyScrumDayButton,
-              selectedDays.includes(day) && meetings_styles.dailyScrumSelectedDayButton
-            ]}
-            onPress={() => toggleDaySelection(day)}
-          >
-            <Text style={meetings_styles.dailyScrumDayText}>{day}</Text>
-          </TouchableOpacity>
-        ))}
+    <View style={{ flex: 1, backgroundColor: '#8c2230' }}>
+      <UpperPane />
+      <View style={sprint_planning_styles.welcomeContainer}>
+        <Text style={sprint_planning_styles.welcomeText}>Confirm Sprint Planning</Text>
+        <Text style={sprint_planning_styles.confirmationText}>
+          Are you sure you want to set sprint planning for this project?
+        </Text>
+        <TouchableOpacity
+          style={sprint_planning_styles.confirmButton}
+          onPress={handleSetSprintPlanning}>
+          <Text style={sprint_planning_styles.confirmButtonText}>Set Sprint Planning</Text>
+        </TouchableOpacity>
       </View>
-      <TouchableOpacity style={meetings_styles.dailyScrumConfirmButton}>
-        <Text style={meetings_styles.dailyScrumConfirmButtonText}>Confirm</Text>
-      </TouchableOpacity>
+      <BottomPane />
     </View>
   );
 }
+
 
 export default function App() {
   const visibility = NavigationBar.useVisibility()
@@ -352,11 +362,11 @@ export default function App() {
         <Stack.Screen name="Links" component={LinksScreen} />
         <Stack.Screen name="Login" component={LoginScreen} />
         <Stack.Screen name="Profile" component={ProfileScreen} />
-        <Stack.Screen name="Daily scrum" component={DailyScrum} />
-        <Stack.Screen name="Meetings" component={MeetingDaysSelection} />
+        <Stack.Screen name="Sprint Planning" component={Planning} />
+        <Stack.Screen name="Sprint Planning Confirmation" component={SprintPlanningConfirmation} />
+
       </Stack.Navigator>
     </NavigationContainer>
   );
 }
 }
-

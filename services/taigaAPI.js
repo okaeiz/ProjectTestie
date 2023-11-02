@@ -103,6 +103,7 @@ export const fetchCurrentProject = async (userId) => {
     const data = await response.json();
 
     if (response.ok) {
+      console.log(data)
       return data;
     } else {
       throw new Error('Failed to fetch from Express');
@@ -112,6 +113,47 @@ export const fetchCurrentProject = async (userId) => {
     throw error;
   }
 };
+
+// Assuming that 'fetchCurrentMilestone' is imported in the same file
+export const setSprintPlanning = async (projId) => {
+  try {
+    // First, get the current milestone ID for the project
+    const milestone = await fetchCurrentMilestone(projId);
+
+    // Here we ensure that we're extracting an integer ID from the milestone object
+    const milestoneId = parseInt(milestone.id, 10); // Using parseInt to convert to integer
+    
+    // Ensure that projId is also an integer
+    const projectId = parseInt(projId, 10); // Using parseInt to convert to integer
+
+    // Then, make the planning request with the retrieved milestone ID
+    const endpoint = `${EXPRESS_BASE_URL}/planning`;
+    const response = await fetch(endpoint, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        // Include any other headers like 'Authorization' if required
+      },
+      body: JSON.stringify({
+        project_id: projectId, // Ensuring project_id is an integer
+        milestone_id: milestoneId, // Ensuring milestone_id is an integer
+      }),
+    });
+
+    const data = await response.json();
+    if (response.ok) {
+      return data; // This will be the response after setting the sprint planning
+    } else {
+      // Since error logging is not desired, we throw an error for the catch block to handle
+      throw new Error(data.message || 'Failed to set sprint planning');
+    }
+  } catch (error) {
+    // Propagate the error up to the caller
+    throw error;
+  }
+};
+
+
 
 
 
